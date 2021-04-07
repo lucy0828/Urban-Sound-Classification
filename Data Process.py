@@ -58,7 +58,8 @@ def envelope(y, rate, threshold):
 
 def save_sample(sample, rate, target_dir, fn, ix):
     fn = fn.split('.wav')[0]
-    dst_path = os.path.join(target_dir.split('.')[0], fn+'_{}.wav'.format(str(ix)))
+    dst_path = os.path.join(target_dir, fn+'_{}.wav'.format(str(ix)))
+    print(dst_path)
     if os.path.exists(dst_path):
         return
     wavfile.write(dst_path, rate, sample)
@@ -120,9 +121,9 @@ def test_threshold(args):
     mask, env = envelope(wav, rate, threshold=args.threshold)
     plt.style.use('ggplot')
     plt.title('Signal Envelope, Threshold = {}'.format(str(args.threshold)))
-    plt.plot(wav[np.logical_not(mask)], color='r', label='remove')
     plt.plot(wav[mask], color='c', label='keep')
     plt.plot(env, color='m', label='envelope')
+    plt.plot(wav[np.logical_not(mask)], color='r', label='remove')
     plt.grid(False)
     plt.legend(loc='best')
     plt.show()
