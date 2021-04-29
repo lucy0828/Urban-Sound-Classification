@@ -20,7 +20,7 @@ UrbanSound8K Classification with Deep Learning Model (FFNN, CNN, RNN)
 ## UrbanSound8K Dataset
 The UrbanSound8k dataset used for model training, can be downloaded from the following [link](https://serv.cusp.nyu.edu/projects/urbansounddataset/urbansound8k.html).
 - Create `"clean"` `"npfiles"` `"wavfiles"` `"test"` `"train"` folders inside UrbanSound8K folder 
-- Create folers from `"0"` to `"9"` in each `"clean"` `"wavfiles"` `"test"` `"train"` folders
+- Create folders from `"0"` to `"9"` in each `"clean"` `"wavfiles"` `"test"` `"train"` folders
 - You can find wav files in `"audio"` folder
 - You can find UrbanSound8K csv file in `"metadata"` folder
 - UrbanSound8K example "gun shot" signal and spectrogram plots are below
