@@ -89,7 +89,6 @@ def Conv2D(N_CLASSES=10, SR=16000, DT=1.0):
                   metrics=['accuracy'])
     return model
 
-
 def LSTM(N_CLASSES=10, SR=16000, DT=1.0):
     input_shape = (int(SR*DT), 1)
     i = get_melspectrogram_layer(input_shape=input_shape,

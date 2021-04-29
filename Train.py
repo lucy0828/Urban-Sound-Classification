@@ -128,28 +128,11 @@ def train(args):
     model.summary()
     
     model.fit(tg, validation_data=vg,
-              epochs=30, verbose=1,
+              epochs=10, verbose=1,
               callbacks=[csv_logger, cp])
 
 
 # -
-
-if __name__ == '__main__':
-
-    parser = argparse.ArgumentParser(description='Audio Classification Training')
-    parser.add_argument('--model_type', type=str, default='lstm',
-                        help='model to run. i.e. conv1d, conv2d, lstm')
-    parser.add_argument('--src_root', type=str, default='../UrbanSound8K/clean',
-                        help='directory of audio files in total duration')
-    parser.add_argument('--batch_size', type=int, default=16,
-                        help='batch size')
-    parser.add_argument('--delta_time', '-dt', type=float, default=1.0,
-                        help='time in seconds to sample audio')
-    parser.add_argument('--sample_rate', '-sr', type=int, default=16000,
-                        help='sample rate of clean audio')
-    args, _ = parser.parse_known_args()
-
-    train(args)
 
 if __name__ == '__main__':
 
@@ -185,4 +168,19 @@ if __name__ == '__main__':
 
     train(args)
 
+if __name__ == '__main__':
 
+    parser = argparse.ArgumentParser(description='Audio Classification Training')
+    parser.add_argument('--model_type', type=str, default='lstm',
+                        help='model to run. i.e. conv1d, conv2d, lstm')
+    parser.add_argument('--src_root', type=str, default='../UrbanSound8K/clean',
+                        help='directory of audio files in total duration')
+    parser.add_argument('--batch_size', type=int, default=16,
+                        help='batch size')
+    parser.add_argument('--delta_time', '-dt', type=float, default=1.0,
+                        help='time in seconds to sample audio')
+    parser.add_argument('--sample_rate', '-sr', type=int, default=16000,
+                        help='sample rate of clean audio')
+    args, _ = parser.parse_known_args()
+
+    train(args)

@@ -43,6 +43,8 @@ Make prediction for one file
 '''
 def make_prediction(args):
     
+    print('Make Prediction')
+    
     model = load_model(args.model_fn,
         custom_objects={'STFT':STFT,
                         'Magnitude':Magnitude,
@@ -79,6 +81,7 @@ def make_prediction(args):
     X_batch = np.array(batch, dtype=np.float32)
     y_pred = model.predict(X_batch)
     y_mean = np.mean(y_pred, axis=0)
+    print(np.round_(y_mean, 2))
     y_pred = np.argmax(y_mean)
     real_class = os.path.dirname(wav_path[0]).split('/')[-1]
     print('Actual class: {}, Predicted class: {}'.format(real_class, classes[y_pred]))
@@ -89,6 +92,8 @@ Make predictions for multiple files
 '''    
 def make_predictions(args):
 
+    print('Make Predictions')
+    
     model = load_model(args.model_fn,
         custom_objects={'STFT':STFT,
                         'Magnitude':Magnitude,
@@ -102,7 +107,8 @@ def make_predictions(args):
     y_true = le.fit_transform(labels)
     results = []
 
-    for z, wav_fn in tqdm(enumerate(wav_paths), total=len(wav_paths)):
+    for z, wav_fn in enumerate(wav_paths):
+        print(wav_fn)
         wav, rate = librosa.load(wav_fn, args.sr)
         mask, env = envelope(wav, rate, threshold=args.threshold)
         clean_wav = wav[mask]
@@ -120,9 +126,11 @@ def make_predictions(args):
         X_batch = np.array(batch, dtype=np.float32)
         y_pred = model.predict(X_batch)
         y_mean = np.mean(y_pred, axis=0)
+        print(np.round_(y_mean, 2))
         y_pred = np.argmax(y_mean)
         real_class = os.path.dirname(wav_fn).split('/')[-1]
         print('Actual class: {}, Predicted class: {}'.format(real_class, classes[y_pred]))
+        print('\n')
         results.append(y_mean)
 
     np.save(os.path.join('./logs', args.pred_fn), np.array(results))
@@ -133,23 +141,85 @@ def make_predictions(args):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Audio Classification Training')
-    parser.add_argument('--model_fn', type=str, default='./models/conv2d.h5',
+    parser.add_argument('--model_fn', type=str, default='./models/conv1d.h5',
                         help='model file to make predictions')
     parser.add_argument('--pred_fn', type=str, default='y_pred',
                         help='fn to write predictions in logs dir')
-    parser.add_argument('--src_dir', type=str, default='../UrbanSound8K/wavfiles',
+    parser.add_argument('--src_dir', type=str, default='../UrbanSound8K/test',
                         help='directory containing wavfiles to predict')
-    parser.add_argument('--fn', type=str, default='7064-6-0-0.wav',
+    parser.add_argument('--fn', type=str, default='210428-1-0-2.wav',
                         help='file name to predict')
     parser.add_argument('--dt', type=float, default=1.0,
                         help='time in seconds to sample audio')
     parser.add_argument('--sr', type=int, default=16000,
                         help='sample rate of clean audio')
-    parser.add_argument('--threshold', type=str, default=0.005,
+    parser.add_argument('--threshold', type=str, default=0.003,
                         help='threshold magnitude for np.int16 dtype')
     args, _ = parser.parse_known_args()
 
-    make_prediction(args)
+    make_predictions(args)
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description='Audio Classification Training')
+    parser.add_argument('--model_fn', type=str, default='./models/conv2d.h5',
+                        help='model file to make predictions')
+    parser.add_argument('--pred_fn', type=str, default='y_pred',
+                        help='fn to write predictions in logs dir')
+    parser.add_argument('--src_dir', type=str, default='../UrbanSound8K/test',
+                        help='directory containing wavfiles to predict')
+    parser.add_argument('--fn', type=str, default='210428-1-0-2.wav',
+                        help='file name to predict')
+    parser.add_argument('--dt', type=float, default=1.0,
+                        help='time in seconds to sample audio')
+    parser.add_argument('--sr', type=int, default=16000,
+                        help='sample rate of clean audio')
+    parser.add_argument('--threshold', type=str, default=0.003,
+                        help='threshold magnitude for np.int16 dtype')
+    args, _ = parser.parse_known_args()
+
+    make_predictions(args)
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description='Audio Classification Training')
+    parser.add_argument('--model_fn', type=str, default='./models/lstm.h5',
+                        help='model file to make predictions')
+    parser.add_argument('--pred_fn', type=str, default='y_pred',
+                        help='fn to write predictions in logs dir')
+    parser.add_argument('--src_dir', type=str, default='../UrbanSound8K/test',
+                        help='directory containing wavfiles to predict')
+    parser.add_argument('--fn', type=str, default='210428-1-0-2.wav',
+                        help='file name to predict')
+    parser.add_argument('--dt', type=float, default=1.0,
+                        help='time in seconds to sample audio')
+    parser.add_argument('--sr', type=int, default=16000,
+                        help='sample rate of clean audio')
+    parser.add_argument('--threshold', type=str, default=0.003,
+                        help='threshold magnitude for np.int16 dtype')
+    args, _ = parser.parse_known_args()
+
+    make_predictions(args)
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description='Audio Classification Training')
+    parser.add_argument('--model_fn', type=str, default='./models/conv1d.h5',
+                        help='model file to make predictions')
+    parser.add_argument('--pred_fn', type=str, default='y_pred',
+                        help='fn to write predictions in logs dir')
+    parser.add_argument('--src_dir', type=str, default='../UrbanSound8K/recorded',
+                        help='directory containing wavfiles to predict')
+    parser.add_argument('--fn', type=str, default='210428-1-0-2.wav',
+                        help='file name to predict')
+    parser.add_argument('--dt', type=float, default=1.0,
+                        help='time in seconds to sample audio')
+    parser.add_argument('--sr', type=int, default=16000,
+                        help='sample rate of clean audio')
+    parser.add_argument('--threshold', type=str, default=0.003,
+                        help='threshold magnitude for np.int16 dtype')
+    args, _ = parser.parse_known_args()
+
     make_predictions(args)
 
 

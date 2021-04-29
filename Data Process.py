@@ -29,6 +29,41 @@ for dirpath, dirnames, files in os.walk('../UrbanSound8K/audio'):
 
 # +
 '''
+count sample files in each class folders
+split train and test data
+'''
+count = 0
+for i in range(0,10):
+    list = os.listdir("../UrbanSound8K/wavfiles/" + str(i)) # dir is your directory path
+    print("../UrbanSound8K/wavfiles/" + str(i) + ": " + str(len(list)))
+    count = count + len(list)
+    
+    trainlist = 8*int(len(list)/10)
+
+    for j in range(0,trainlist):
+        shutil.copy("../UrbanSound8K/wavfiles/" + str(i) + "/" + list[j], "../UrbanSound8K/train/" + str(i))
+    for j in range(trainlist,len(list)):
+        shutil.copy("../UrbanSound8K/wavfiles/" + str(i) + "/" + list[j], "../UrbanSound8K/test/" + str(i))
+
+print("Total sample files: " + str(count))
+
+count = 0
+for i in range(0,10):
+    list = os.listdir("../UrbanSound8K/train/" + str(i)) # dir is your directory path
+    print("../UrbanSound8K/train/" + str(i) + ": " + str(len(list)))
+    count = count + len(list)
+
+print("Total sample files: " + str(count))
+
+count = 0
+for i in range(0,10):
+    list = os.listdir("../UrbanSound8K/test/" + str(i)) # dir is your directory path
+    print("../UrbanSound8K/test/" + str(i) + ": " + str(len(list)))
+    count = count + len(list)
+
+print("Total sample files: " + str(count))
+# +
+'''
 Functions used for processing audio files
 '''
 import matplotlib.pyplot as plt
@@ -114,6 +149,7 @@ def test_threshold(args):
     src_root = args.src_root
     wav_paths = glob('{}/**'.format(src_root), recursive=True)
     wav_path = [x for x in wav_paths if args.fn in x]
+    print(wav_paths)
     if len(wav_path) != 1:
         print('audio file not found for sub-string: {}'.format(args.fn))
         return
@@ -139,7 +175,7 @@ split audio files in samples with delta time
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Cleaning audio data')
-    parser.add_argument('--src_root', type=str, default='../UrbanSound8K/wavfiles',
+    parser.add_argument('--src_root', type=str, default='../UrbanSound8K/test',
                         help='directory of audio files in total duration')
     parser.add_argument('--dst_root', type=str, default='../UrbanSound8K/clean',
                         help='directory to put audio files split by delta_time')
@@ -150,27 +186,14 @@ if __name__ == '__main__':
 
     parser.add_argument('--fn', type=str, default='7383-3-0-1.wav',
                         help='file to plot over time to check magnitude')
-    parser.add_argument('--threshold', type=str, default=0.005,
+    parser.add_argument('--threshold', type=str, default=0.003,
                         help='threshold magnitude for np.float32 dtype')
     args, _ = parser.parse_known_args()
 
-    test_threshold(args)
-
+    #test_threshold(args)
 
     split_wavs(args)
 
 
-# +
-'''
-count sample files in each class folders
-'''
-count = 0
-for i in range(0,10):
-    list = os.listdir("../UrbanSound8K/clean/" + str(i)) # dir is your directory path
-    print("../UrbanSound8K/clean/" + str(i) + ": " + str(len(list)))
-    count = count + len(list)
-
-print("Total sample files: " + str(count))
-# -
 
 
